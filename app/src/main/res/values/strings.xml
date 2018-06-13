@@ -1,3 +1,45 @@
 <resources>
-    <string name="app_name">Patient</string>
+    <string name="appName">阳光医家</string>
+    <string name="title_home">首页</string>
+    <string name="title_serve">服务</string>
+    <string name="title_my">我的</string>
+
+    <string name="no_network_connection">无网络连接</string>
+
+    <string name="jump">跳过</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="more">更多</string>
+    <string name="add">添加</string>
+    <string name="delete">删除</string>
+    <string name="submit">提交</string>
+    <string name="mes">消息</string>
+    <string name="all">全部</string>
+    <string name="complete">完成</string>
+    <string name="invite">邀请</string>
+    <string name="select">选取</string>
+    <string name="clipping">剪裁</string>
+    <string name="photograph">拍照</string>
+    <string name="select_from_album">从相册选择</string>
+    <string name="please_input_old_psd">请输入原密码</string>
+    <string name="please_input_new_psd">请输入新密码</string>
+    <string name="please_input_new_psd_one_more">请再次输入新密码</string>
+    <string name="input_new_psd_not_fit">您输入的新密码不一致</string>
+    <string name="modify_success_to_login">密码修改成功，请重新登录&#8230;</string>
+    <string name="rationale_camera">阳光医线需要开启您的相机并且获取您的相册&#8230;</string>
+    <string name="rationale_storage">阳光医线需要获取您手机存储权限对产品进行升级&#8230;</string>
+    <string name="exit_system">再按一次退出程序</string>
+    <string name="empty"> </string>
+    <string name="num">666</string>
+    <string name="clinic_trial">临床试验</string>
+    <string name="system_notice">系统公告</string>
+    <string name="no_data">暂无数据</string>
+    <string name="loading">正在加载&#8230;</string>
+    <string name="new_version">发现新版本：</string>
+    <string name="update_to_new_version">升级到新版本</string>
+    <string name="update_detail">优化内容:</string>
+    <string name="update_to_right_now">立即升级</string>
+    <string name="ignore_version">忽略此版本</string>
+
+    <string name="viewpager_indicator">%1$d/%2$d</string>
 </resources>

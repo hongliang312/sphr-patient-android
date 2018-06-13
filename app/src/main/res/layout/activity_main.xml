@@ -4,15 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lightheart.sphr.patient.MainActivity">
+    tools:context="com.lightheart.sphr.patient.ui.main.ui.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.lightheart.sphr.patient.view.NoScrollViewPager
+            android:id="@+id/vpMain"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.lightheart.sphr.patient.view.CommonTabLayout
+            android:id="@+id/tabMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:paddingBottom="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_6"
+            app:tl_indicator_height="@dimen/dp_0"
+            app:tl_textSelectColor="@color/mainTab"
+            app:tl_textUnselectColor="@color/three"
+            app:tl_textsize="@dimen/micro" />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
