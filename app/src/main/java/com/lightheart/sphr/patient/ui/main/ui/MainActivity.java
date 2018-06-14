@@ -3,12 +3,12 @@ package com.lightheart.sphr.patient.ui.main.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
@@ -25,12 +25,7 @@ import com.lightheart.sphr.patient.ui.main.presenter.MainPresenter;
 import com.lightheart.sphr.patient.ui.my.MyFragment;
 import com.lightheart.sphr.patient.ui.serve.ServeFragment;
 import com.lightheart.sphr.patient.utils.RxBus;
-import com.lightheart.sphr.patient.view.CommonTabLayout;
-import com.lightheart.sphr.patient.view.CustomTabEntity;
-import com.lightheart.sphr.patient.view.NoScrollViewPager;
-import com.lightheart.sphr.patient.view.OnTabSelectListener;
 import com.lightheart.sphr.patient.view.ProgressUtil;
-import com.lightheart.sphr.patient.view.TabEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,17 +41,12 @@ import static com.lightheart.sphr.patient.app.Constant.RC_READ_EXTERNAL_STORAGE;
 import static com.lightheart.sphr.patient.app.Constant.RC_UPDATE;
 import static com.lightheart.sphr.patient.app.Constant.REQUEST_VERSION;
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, EasyPermissions.PermissionCallbacks, OnTabSelectListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, BottomNavigationView.OnNavigationItemSelectedListener, EasyPermissions.PermissionCallbacks {
 
-    @BindView(R.id.vpMain)
-    NoScrollViewPager mVpMainPager;
-    @BindView(R.id.tabMain)
-    CommonTabLayout tabMain;
-    private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
+    @BindView(R.id.navigation)
+    BottomNavigationView mNavigation;
+    private int mLastFgIndex;
     private List<BaseFragment> mFragments = new ArrayList<>();
-    private String[] mTitles = {"首页", "服务", "我的"};
-    private int[] selectIcons = {R.mipmap.ic_home, R.mipmap.ic_serve, R.mipmap.ic_my};
-    private int[] unselectedIcons = {R.mipmap.ic_home_unselected, R.mipmap.ic_serve_unselected, R.mipmap.ic_my_unselected};
     private long mExitTime;
     // 外部存储权限
     private static final String[] READ_AND_WRITE_PERMISSION =
@@ -75,7 +65,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     protected void initView() {
+        mNavigation.setOnNavigationItemSelectedListener(this);
+        mNavigation.setItemIconTintList(null);
         initFragment();
+        switchFragment(0);
         RxBus.getInstance().toFlowable(EventModel.class).subscribe(new Consumer<EventModel>() {
             @Override
             public void accept(EventModel event) throws Exception {
@@ -92,69 +85,61 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
      * 初始化fragment
      */
     private void initFragment() {
-        mFragments.clear();
         mFragments.add(HomeFragment.newInstance());
         mFragments.add(ServeFragment.newInstance());
         mFragments.add(MyFragment.newInstance());
+    }
 
-        mTabEntities.clear();
-        for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i], selectIcons[i], unselectedIcons[i]));
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                switchFragment(0);
+                break;
+            case R.id.navigation_serve:
+                switchFragment(1);
+                break;
+            case R.id.navigation_my:
+                switchFragment(2);
+                break;
         }
-        MyPagerAdapter mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        mVpMainPager.setAdapter(mAdapter);
-        tabMain.setTabData(mTabEntities);
-        tabMain.setCurrentTab(0);
-        tabMain.setOnTabSelectListener(this);
-        mVpMainPager.addOnPageChangeListener(this);
-    }
-
-    @Override
-    public void onTabSelect(int position) {
-        mVpMainPager.setCurrentItem(position);
-    }
-
-    @Override
-    public void onTabReselect(int position) {
-    }
-
-    @Override
-    protected boolean showHomeAsUp() {
         return true;
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        tabMain.setCurrentTab(position);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-        MyPagerAdapter(FragmentManager fm) {
-            super(fm);
+    /**
+     * 切换fragment
+     *
+     * @param position 要显示的fragment的下标
+     */
+    private void switchFragment(int position) {
+        if (position >= mFragments.size()) {
+            return;
         }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
+        MenuItem home = mNavigation.getMenu().findItem(R.id.navigation_home);
+        MenuItem serve = mNavigation.getMenu().findItem(R.id.navigation_serve);
+        MenuItem my = mNavigation.getMenu().findItem(R.id.navigation_my);
+        if (position == 0) {
+            home.setIcon(R.mipmap.ic_home);
+            serve.setIcon(R.mipmap.ic_serve_unselected);
+            my.setIcon(R.mipmap.ic_my_unselected);
+        } else if (position == 1) {
+            home.setIcon(R.mipmap.ic_home_unselected);
+            serve.setIcon(R.mipmap.ic_serve);
+            my.setIcon(R.mipmap.ic_my_unselected);
+        } else if (position == 2) {
+            home.setIcon(R.mipmap.ic_home_unselected);
+            serve.setIcon(R.mipmap.ic_serve_unselected);
+            my.setIcon(R.mipmap.ic_my);
         }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTitles[position];
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment targetFg = mFragments.get(position);
+        Fragment lastFg = mFragments.get(mLastFgIndex);
+        mLastFgIndex = position;
+        ft.hide(lastFg);
+        if (!targetFg.isAdded())
+            ft.add(R.id.layout_fragment, targetFg);
+        ft.show(targetFg);
+        ft.commitAllowingStateLoss();
     }
 
     @Override

@@ -15,7 +15,8 @@
             android:id="@+id/vpMain"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:visibility="gone" />
 
         <com.lightheart.sphr.patient.view.CommonTabLayout
             android:id="@+id/tabMain"
@@ -24,10 +25,27 @@
             android:background="@android:color/white"
             android:paddingBottom="@dimen/dp_6"
             android:paddingTop="@dimen/dp_6"
+            android:visibility="gone"
             app:tl_indicator_height="@dimen/dp_0"
             app:tl_textSelectColor="@color/mainTab"
             app:tl_textUnselectColor="@color/three"
             app:tl_textsize="@dimen/micro" />
+
+        <FrameLayout
+            android:id="@+id/layout_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="?android:attr/windowBackground"
+            app:itemIconTint="@null"
+            app:itemTextColor="@color/bottom_color"
+            app:menu="@menu/navigation" />
 
     </LinearLayout>
 
